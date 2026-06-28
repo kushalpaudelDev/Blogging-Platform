@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block content %}
+<div class="container">
+  <h1>{{ post.title }}</h1>
+  <p style="color: #777;">By {{ post.author.username }} on {{ post.created_at|date:"M d, Y" }} | {{ post.likes.count }} Likes</p>
+  
+  <div style="margin-bottom: 16px;">
+    {% if user.is_authenticated %}
+      <a href="{% url 'post_like' post.pk %}" class="btn" style="background: #eef2ff; color: #4f46e5; padding: 8px 16px; text-decoration: none; border-radius: 4px; display: inline-block;">
+        {% if user in post.likes.all %}Unlike{% else %}Like{% endif %}
+      </a>
+    {% endif %}
+  </div>
+  {% if user == post.author %}
+  <div style="margin-bottom: 32px;">
+    <a href="{% url 'post_update' post.pk %}" class="btn" style="background: #e2e8f0; color: #333; padding: 8px 16px; text-decoration: none; border-radius: 4px; margin-right: 8px;">Edit</a>
+    <a href="{% url 'post_delete' post.pk %}" class="btn" style="background: #fee2e2; color: #dc2626; padding: 8px 16px; text-decoration: none; border-radius: 4px;">Delete</a>
+  </div>
+  {% endif %}
+
+  <div class="post-content" style="font-size: 18px; line-height: 1.6; margin-bottom: 48px;">
+    {{ post.content|linebreaks }}
+  </div>
+
+  <hr style="border: 0; border-top: 1px solid #eee; margin: 32px 0;">
+  
+  <h3>Comments ({{ comments.count }})</h3>
+  <div class="comments-section" style="margin-bottom: 32px;">
+    {% for comment in comments %}
+    <div class="comment" style="background: #f9fafb; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+      <p style="margin: 0 0 8px 0;"><strong>{{ comment.author.username }}</strong> said:</p>
+      <div style="margin-bottom: 8px;">{{ comment.content|linebreaks }}</div>
+      <small style="color: #888;">{{ comment.created_at|date:"M d, Y H:i" }}</small>
+    </div>
+    {% empty %}
+    <p style="color: #666;">No comments yet.</p>
+    {% endfor %}
+  </div>
+
+  {% if user.is_authenticated %}
+  <div style="background: #fff; padding: 24px; border: 1px solid #ddd; border-radius: 8px;">
+    <h4 style="margin-top: 0;">Leave a comment</h4>
+    <form method="POST">
+      {% csrf_token %}
+      {% for field in form %}
+      <div style="margin-bottom: 16px;">
+        {{ field }}
+      </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary">Post Comment</button>
+    </form>
+  </div>
+  {% else %}
+  <p><a href="{% url 'login' %}">Log in</a> to leave a comment.</p>
+  {% endif %}
+</div>
+{% endblock %}

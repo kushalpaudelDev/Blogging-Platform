@@ -16,7 +16,7 @@
           {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
         </div>
         {% endfor %}
-        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:0.5rem;">Create Account</button>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">Create Account</button>
       </form>
     </div>
     <div class="auth-switch">Already have an account? <a href="{% url 'login' %}">Sign in</a></div>

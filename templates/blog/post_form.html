@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}{% if form.instance.pk %}Edit Post{% else %}New Post{% endif %}{% endblock %}
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 0 auto;">
+  <h1>{% if form.instance.pk %}Edit Post{% else %}Write a New Post{% endif %}</h1>
+  
+  <form method="POST" style="background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group" style="margin-bottom: 24px;">
+      <label style="display: block; margin-bottom: 8px; font-weight: 500;">{{ field.label }}</label>
+      {{ field }}
+      {% if field.errors %}
+      <ul style="color: #dc2626; margin-top: 8px; padding-left: 16px;">
+        {% for e in field.errors %}<li>{{ e }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+    {% endfor %}
+    <div style="margin-top: 32px;">
+      <button type="submit" class="btn btn-primary" style="padding: 12px 24px; font-size: 16px;">{% if form.instance.pk %}Update Post{% else %}Publish{% endif %}</button>
+      <a href="javascript:history.back()" style="margin-left: 16px; color: #666; text-decoration: none;">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
